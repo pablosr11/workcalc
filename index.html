@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Income Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-blue-50 min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white p-8 rounded-lg shadow-md max-w-4xl w-full flex">
+        <div class="w-1/2 pr-4">
+            <h1 class="text-2xl font-bold mb-6 text-center text-blue-600">worklife Calculator</h1>
+            <form id="incomeForm" class="space-y-4">
+                <div>
+                    <label for="workingDays" class="block text-sm font-medium text-gray-700">Working days per month</label>
+                    <input type="number" id="workingDays" name="workingDays" value="21" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                </div>
+                <div>
+                    <label for="hoursPerDay" class="block text-sm font-medium text-gray-700">Hours worked per day</label>
+                    <input type="number" id="hoursPerDay" name="hoursPerDay" value="8" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                </div>
+                <div>
+                    <label for="holidaysPerYear" class="block text-sm font-medium text-gray-700">Holidays per year</label>
+                    <input type="number" id="holidaysPerYear" name="holidaysPerYear" value="25" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                </div>
+                <div class="flex items-center space-x-2">
+                    <div class="flex-grow">
+                        <label for="monthlyIncome" class="block text-sm font-medium text-gray-700">Monthly income</label>
+                        <input type="number" id="monthlyIncome" name="monthlyIncome" value="5000" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                    </div>
+                    <div class="w-24">
+                        <label for="currency" class="block text-sm font-medium text-gray-700">Currency</label>
+                        <select id="currency" name="currency" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                            <option value="£" selected>GBP (£)</option>
+                            <option value="$">USD ($)</option>
+                            <option value="€">EUR (€)</option>
+                            <option value="¥">JPY (¥)</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label for="yearlyBonus" class="block text-sm font-medium text-gray-700">Yearly bonus (optional)</label>
+                    <input type="number" id="yearlyBonus" name="yearlyBonus" value="5000" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                </div>
+                <div>
+                    <label for="pensionContribution" class="block text-sm font-medium text-gray-700">Pension contribution (%)</label>
+                    <input type="number" id="pensionContribution" name="pensionContribution" value="8" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                </div>
+                <div>
+                    <label for="goalMonthlyIncome" class="block text-sm font-medium text-gray-700">Goal monthly income (optional)</label>
+                    <input type="number" id="goalMonthlyIncome" name="goalMonthlyIncome" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                </div>
+                <div>
+                    <label for="goalTotalSavings" class="block text-sm font-medium text-gray-700">Goal total savings (optional)</label>
+                    <input type="number" id="goalTotalSavings" name="goalTotalSavings" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                </div>
+                <button type="submit" class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">Calculate</button>
+            </form>
+        </div>
+        <div class="w-1/2 pl-4">
+            <h2 class="text-xl font-bold mb-4 text-blue-600">Results</h2>
+            <div id="resultsSection" class="hidden space-y-6">
+                <div>
+                    <h3 class="text-lg font-semibold mb-2">Current Rates</h3>
+                    <table class="w-full">
+                        <tr>
+                            <td class="font-semibold">Per hour:</td>
+                            <td id="ratePerHour"></td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold">Per day:</td>
+                            <td id="ratePerDay"></td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold">Per month:</td>
+                            <td id="ratePerMonth"></td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold">Per year:</td>
+                            <td id="ratePerYear"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div id="monthlyGoalResults" class="hidden">
+                    <h3 class="text-lg font-semibold mb-2">Monthly Income Goal</h3>
+                    <table class="w-full">
+                        <tr>
+                            <td class="font-semibold">Required hourly rate:</td>
+                            <td id="requiredHourlyRate"></td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold">Required rate at half hours:</td>
+                            <td id="requiredHourlyRateHalf"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div id="savingsGoalResults" class="hidden">
+                    <h3 class="text-lg font-semibold mb-2">Total Savings Goal</h3>
+                    <table class="w-full">
+                        <tr>
+                            <td class="font-semibold">Years to reach goal:</td>
+                            <td id="yearsToGoal"></td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold">Years at 50% higher rate:</td>
+                            <td id="yearsToGoal50Percent"></td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold">Years at 100% higher rate:</td>
+                            <td id="yearsToGoal100Percent"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('incomeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const workingDays = parseFloat(document.getElementById('workingDays').value) || 21;
+            const hoursPerDay = parseFloat(document.getElementById('hoursPerDay').value) || 8;
+            const holidaysPerYear = parseFloat(document.getElementById('holidaysPerYear').value) || 25;
+            const monthlyIncome = parseFloat(document.getElementById('monthlyIncome').value);
+            const currency = document.getElementById('currency').value;
+            const yearlyBonus = parseFloat(document.getElementById('yearlyBonus').value) || 0;
+            const pensionContribution = parseFloat(document.getElementById('pensionContribution').value) || 8;
+            const goalMonthlyIncome = parseFloat(document.getElementById('goalMonthlyIncome').value);
+            const goalTotalSavings = parseFloat(document.getElementById('goalTotalSavings').value);
+
+            if (!goalMonthlyIncome && !goalTotalSavings) {
+                alert('Please fill in either Goal monthly income or Goal total savings.');
+                return;
+            }
+
+            const holidaysPerMonth = holidaysPerYear / 12;
+            const workingDaysPerMonth = workingDays - holidaysPerMonth;
+            const workingHoursPerMonth = workingDaysPerMonth * hoursPerDay;
+            const workingMonthsPerYear = 12 - (holidaysPerYear / workingDays);
+            const workingHoursPerYear = workingHoursPerMonth * workingMonthsPerYear;
+
+            const monthlyPension = (monthlyIncome * pensionContribution) / 100;
+            const ratePerHour = (monthlyIncome - monthlyPension + yearlyBonus / 12) / workingHoursPerMonth;
+            const ratePerDay = ratePerHour * hoursPerDay;
+            const ratePerMonth = ratePerHour * workingHoursPerMonth;
+            const ratePerYear = ratePerHour * workingHoursPerYear;
+
+            document.getElementById('ratePerHour').textContent = `${currency}${ratePerHour.toFixed(2)}`;
+            document.getElementById('ratePerDay').textContent = `${currency}${ratePerDay.toFixed(2)}`;
+            document.getElementById('ratePerMonth').textContent = `${currency}${ratePerMonth.toFixed(2)}`;
+            document.getElementById('ratePerYear').textContent = `${currency}${ratePerYear.toFixed(2)}`;
+
+            if (goalMonthlyIncome) {
+                const requiredHourlyRate = goalMonthlyIncome / workingHoursPerMonth;
+                const requiredHourlyRateHalf = goalMonthlyIncome / (workingHoursPerMonth / 2);
+                document.getElementById('requiredHourlyRate').textContent = `${currency}${requiredHourlyRate.toFixed(2)}`;
+                document.getElementById('requiredHourlyRateHalf').textContent = `${currency}${requiredHourlyRateHalf.toFixed(2)}`;
+                document.getElementById('monthlyGoalResults').classList.remove('hidden');
+                document.getElementById('savingsGoalResults').classList.add('hidden');
+            } else if (goalTotalSavings) {
+                const annualSavings = ratePerYear - (12 * monthlyIncome * (1 - pensionContribution / 100));
+                const yearsToGoal = goalTotalSavings / annualSavings;
+                const yearsToGoal50Percent = goalTotalSavings / (annualSavings * 1.5);
+                const yearsToGoal100Percent = goalTotalSavings / (annualSavings * 2);
+                document.getElementById('yearsToGoal').textContent = yearsToGoal.toFixed(2);
+                document.getElementById('yearsToGoal50Percent').textContent = yearsToGoal50Percent.toFixed(2);
+                document.getElementById('yearsToGoal100Percent').textContent = yearsToGoal100Percent.toFixed(2);
+                document.getElementById('savingsGoalResults').classList.remove('hidden');
+                document.getElementById('monthlyGoalResults').classList.add('hidden');
+            }
+
+            document.getElementById('resultsSection').classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>
