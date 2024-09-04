@@ -83,10 +83,12 @@
                         <tr>
                             <td class="font-semibold">Required hourly rate:</td>
                             <td id="requiredHourlyRate"></td>
+                            <td id="requiredHourlyRateChange" class="text-sm text-gray-600"></td>
                         </tr>
                         <tr>
                             <td class="font-semibold">Required rate at half hours:</td>
                             <td id="requiredHourlyRateHalf"></td>
+                            <td id="requiredHourlyRateHalfChange" class="text-sm text-gray-600"></td>
                         </tr>
                     </table>
                 </div>
@@ -126,8 +128,15 @@
 
             const requiredHourlyRate = goalMonthlyIncome / workingHoursPerMonth;
             const requiredHourlyRateHalf = goalMonthlyIncome / (workingHoursPerMonth / 2);
+            
+            const hourlyRateChange = ((requiredHourlyRate - ratePerHour) / ratePerHour) * 100;
+            const hourlyRateHalfChange = ((requiredHourlyRateHalf - ratePerHour) / ratePerHour) * 100;
+
             document.getElementById('requiredHourlyRate').textContent = `${currency}${requiredHourlyRate.toFixed(2)}`;
+            document.getElementById('requiredHourlyRateChange').textContent = `(${hourlyRateChange >= 0 ? '+' : ''}${hourlyRateChange.toFixed(2)}%)`;
+
             document.getElementById('requiredHourlyRateHalf').textContent = `${currency}${requiredHourlyRateHalf.toFixed(2)}`;
+            document.getElementById('requiredHourlyRateHalfChange').textContent = `(${hourlyRateHalfChange >= 0 ? '+' : ''}${hourlyRateHalfChange.toFixed(2)}%)`;
 
             document.getElementById('resultsSection').classList.remove('hidden');
         });
