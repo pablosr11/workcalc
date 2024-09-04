@@ -9,3 +9,7 @@ why:
 fyi:
 make d "commit-msg" to git add, commit and push (deploy)
 static html served by cloudflare
+
+
+todo:
+add holidays, pension, bonus

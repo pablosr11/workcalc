@@ -19,10 +19,6 @@
                     <label for="hoursPerDay" class="block text-sm font-medium text-gray-700">Hours worked per day</label>
                     <input type="number" id="hoursPerDay" name="hoursPerDay" value="8" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                 </div>
-                <div>
-                    <label for="holidaysPerYear" class="block text-sm font-medium text-gray-700">Holidays per year</label>
-                    <input type="number" id="holidaysPerYear" name="holidaysPerYear" value="25" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                </div>
                 <div class="flex items-center space-x-2">
                     <div class="flex-grow">
                         <label for="monthlyIncome" class="block text-sm font-medium text-gray-700">Monthly income</label>
@@ -34,14 +30,6 @@
                             <option value="£">GBP (£)</option>
                         </select>
                     </div>
-                </div>
-                <div>
-                    <label for="yearlyBonus" class="block text-sm font-medium text-gray-700">Yearly bonus (optional)</label>
-                    <input type="number" id="yearlyBonus" name="yearlyBonus" value="5000" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                </div>
-                <div>
-                    <label for="pensionContribution" class="block text-sm font-medium text-gray-700">Pension contribution (%)</label>
-                    <input type="number" id="pensionContribution" name="pensionContribution" value="8" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                 </div>
                 <div>
                     <label for="goalMonthlyIncome" class="block text-sm font-medium text-gray-700">Goal monthly income</label>
@@ -75,15 +63,15 @@
                     </table>
                 </div>
                 <div>
-                    <h3 class="text-lg font-semibold mb-2">Monthly Income Goal</h3>
+                    <h3 class="text-lg font-semibold mb-2">To achieve your objective:</h3>
                     <table class="w-full">
                         <tr>
-                            <td class="font-semibold">Required hourly rate:</td>
+                            <td class="font-semibold">Hourly rate (current hours):</td>
                             <td id="requiredHourlyRate"></td>
                             <td id="requiredHourlyRateChange" class="text-sm text-gray-600"></td>
                         </tr>
                         <tr>
-                            <td class="font-semibold">Required rate at half hours:</td>
+                            <td class="font-semibold">Hourly rate (half hours):</td>
                             <td id="requiredHourlyRateHalf"></td>
                             <td id="requiredHourlyRateHalfChange" class="text-sm text-gray-600"></td>
                         </tr>
@@ -99,21 +87,16 @@
             
             const workingDays = parseFloat(document.getElementById('workingDays').value) || 21;
             const hoursPerDay = parseFloat(document.getElementById('hoursPerDay').value) || 8;
-            const holidaysPerYear = parseFloat(document.getElementById('holidaysPerYear').value) || 25;
             const monthlyIncome = parseFloat(document.getElementById('monthlyIncome').value);
             const currency = document.getElementById('currency').value;
-            const yearlyBonus = parseFloat(document.getElementById('yearlyBonus').value) || 0;
-            const pensionContribution = parseFloat(document.getElementById('pensionContribution').value) || 8;
             const goalMonthlyIncome = parseFloat(document.getElementById('goalMonthlyIncome').value);
 
-            const holidaysPerMonth = holidaysPerYear / 12;
-            const workingDaysPerMonth = workingDays - holidaysPerMonth;
+            const workingDaysPerMonth = workingDays;
             const workingHoursPerMonth = workingDaysPerMonth * hoursPerDay;
-            const workingMonthsPerYear = 12 - (holidaysPerYear / workingDays);
+            const workingMonthsPerYear = 12;
             const workingHoursPerYear = workingHoursPerMonth * workingMonthsPerYear;
 
-            const monthlyPension = (monthlyIncome * pensionContribution) / 100;
-            const ratePerHour = (monthlyIncome - monthlyPension + yearlyBonus / 12) / workingHoursPerMonth;
+            const ratePerHour = monthlyIncome / workingHoursPerMonth;
             const ratePerDay = ratePerHour * hoursPerDay;
             const ratePerMonth = ratePerHour * workingHoursPerMonth;
             const ratePerYear = ratePerHour * workingHoursPerYear;
