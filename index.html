@@ -76,44 +76,29 @@
                                 <tr>
                                     <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Period</th>
                                     <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Base</th>
-                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">+Bonus</th>
-                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">+Pension</th>
-                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">+Holidays</th>
-                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">All</th>
+                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
                                 <tr>
                                     <td class="px-3 py-2 whitespace-nowrap text-sm font-medium text-gray-900">Per Hour</td>
-                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerHour"></td>
-                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerHourWithBonus"></td>
-                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerHourWithPension"></td>
-                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerHourWithHolidays"></td>
-                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerHourWithBonusHolidaysAndPension"></td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="baseRatePerHour"></td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="totalRatePerHour"></td>
                                 </tr>
                                 <tr>
                                     <td class="px-3 py-2 whitespace-nowrap text-sm font-medium text-gray-900">Per Day</td>
-                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerDay"></td>
-                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerDayWithBonus"></td>
-                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerDayWithPension"></td>
-                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerDayWithHolidays"></td>
-                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerDayWithBonusHolidaysAndPension"></td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="baseRatePerDay"></td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="totalRatePerDay"></td>
                                 </tr>
                                 <tr>
                                     <td class="px-3 py-2 whitespace-nowrap text-sm font-medium text-gray-900">Per Month</td>
-                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerMonth"></td>
-                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerMonthWithBonus"></td>
-                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerMonthWithPension"></td>
-                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerMonthWithHolidays"></td>
-                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerMonthWithBonusHolidaysAndPension"></td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="baseRatePerMonth"></td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="totalRatePerMonth"></td>
                                 </tr>
                                 <tr>
                                     <td class="px-3 py-2 whitespace-nowrap text-sm font-medium text-gray-900">Per Year</td>
-                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerYear"></td>
-                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerYearWithBonus"></td>
-                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerYearWithPension"></td>
-                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerYearWithHolidays"></td>
-                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerYearWithBonusHolidaysAndPension"></td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="baseRatePerYear"></td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="totalRatePerYear"></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -151,59 +136,51 @@
             const goalMonthlyIncome = parseFloat(document.getElementById('goalMonthlyIncome').value) || 0;
 
             const workingDaysPerMonth = workingDays;
-            const workingHoursPerMonth = workingDaysPerMonth * hoursPerDay;
             const workingMonthsPerYear = 12;
             const workingDaysPerYear = workingDaysPerMonth * workingMonthsPerYear;
-            const workingHoursPerYear = workingDaysPerYear * hoursPerDay;
+            const actualWorkingDaysPerYear = workingDaysPerYear - holidaysPerYear;
+            const actualWorkingHoursPerYear = actualWorkingDaysPerYear * hoursPerDay;
 
             const pensionFactor = 1 + (pensionPercentage / 100);
             const annualIncomeWithoutBonus = monthlyIncome * 12;
             const annualIncomeWithBonus = annualIncomeWithoutBonus + annualBonus;
 
-            // Calculate actual working time
-            const actualWorkingDaysPerYear = workingDaysPerYear - holidaysPerYear;
-            const actualWorkingHoursPerYear = actualWorkingDaysPerYear * hoursPerDay;
+            // Calculate base rates
+            const baseHourlyRate = annualIncomeWithoutBonus / (workingDaysPerYear * hoursPerDay);
+            const baseDailyRate = baseHourlyRate * hoursPerDay;
+            const baseMonthlyRate = monthlyIncome;
+            const baseYearlyRate = annualIncomeWithoutBonus;
 
-            // Calculate current rates
-            const currentHourlyRate = annualIncomeWithoutBonus / actualWorkingHoursPerYear;
-            const currentHourlyRateWithBonus = annualIncomeWithBonus / actualWorkingHoursPerYear;
-            const currentHourlyRateWithPension = currentHourlyRate * pensionFactor;
-            const currentHourlyRateAll = currentHourlyRateWithBonus * pensionFactor;
-
-            // Calculate required rates
-            const requiredAnnualIncome = goalMonthlyIncome * 12;
-            const requiredHourlyRate = requiredAnnualIncome / actualWorkingHoursPerYear;
-            const requiredHourlyRateHalf = requiredHourlyRate * 2;
-
-            // Calculate percentage changes
-            const hourlyRateChange = ((requiredHourlyRate - currentHourlyRateAll) / currentHourlyRateAll) * 100;
-            const hourlyRateHalfChange = ((requiredHourlyRateHalf - currentHourlyRateAll) / currentHourlyRateAll) * 100;
+            // Calculate total rates (including bonus, pension, and holidays)
+            const totalHourlyRate = (annualIncomeWithBonus * pensionFactor) / actualWorkingHoursPerYear;
+            const totalDailyRate = totalHourlyRate * hoursPerDay;
+            const totalMonthlyRate = (annualIncomeWithBonus * pensionFactor) / 12;
+            const totalYearlyRate = annualIncomeWithBonus * pensionFactor;
 
             // Update DOM elements
             function updateElement(id, value) {
                 document.getElementById(id).textContent = `${currency}${value.toFixed(2)}`;
             }
 
-            // Update current rates table
-            updateElement('ratePerHourWithBonus', currentHourlyRateWithBonus);
-            updateElement('ratePerDayWithBonus', currentHourlyRateWithBonus * hoursPerDay);
-            updateElement('ratePerMonthWithBonus', (annualIncomeWithBonus / 12));
-            updateElement('ratePerYearWithBonus', annualIncomeWithBonus);
+            // Update results table
+            updateElement('baseRatePerHour', baseHourlyRate);
+            updateElement('baseRatePerDay', baseDailyRate);
+            updateElement('baseRatePerMonth', baseMonthlyRate);
+            updateElement('baseRatePerYear', baseYearlyRate);
 
-            updateElement('ratePerHourWithPension', currentHourlyRateWithPension);
-            updateElement('ratePerDayWithPension', currentHourlyRateWithPension * hoursPerDay);
-            updateElement('ratePerMonthWithPension', (annualIncomeWithoutBonus * pensionFactor / 12));
-            updateElement('ratePerYearWithPension', annualIncomeWithoutBonus * pensionFactor);
+            updateElement('totalRatePerHour', totalHourlyRate);
+            updateElement('totalRatePerDay', totalDailyRate);
+            updateElement('totalRatePerMonth', totalMonthlyRate);
+            updateElement('totalRatePerYear', totalYearlyRate);
 
-            updateElement('ratePerHourWithHolidays', currentHourlyRate);
-            updateElement('ratePerDayWithHolidays', currentHourlyRate * hoursPerDay);
-            updateElement('ratePerMonthWithHolidays', (annualIncomeWithoutBonus / 12));
-            updateElement('ratePerYearWithHolidays', annualIncomeWithoutBonus);
+            // Calculate required rates for objective
+            const requiredAnnualIncome = goalMonthlyIncome * 12;
+            const requiredHourlyRate = requiredAnnualIncome / actualWorkingHoursPerYear;
+            const requiredHourlyRateHalf = requiredHourlyRate * 2;
 
-            updateElement('ratePerHourWithBonusHolidaysAndPension', currentHourlyRateAll);
-            updateElement('ratePerDayWithBonusHolidaysAndPension', currentHourlyRateAll * hoursPerDay);
-            updateElement('ratePerMonthWithBonusHolidaysAndPension', (annualIncomeWithBonus * pensionFactor / 12));
-            updateElement('ratePerYearWithBonusHolidaysAndPension', annualIncomeWithBonus * pensionFactor);
+            // Calculate percentage changes
+            const hourlyRateChange = ((requiredHourlyRate - totalHourlyRate) / totalHourlyRate) * 100;
+            const hourlyRateHalfChange = ((requiredHourlyRateHalf - totalHourlyRate) / totalHourlyRate) * 100;
 
             // Update "To achieve your objective" section
             document.getElementById('requiredHourlyRate').textContent = `${currency}${requiredHourlyRate.toFixed(2)}`;
