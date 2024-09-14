@@ -109,22 +109,13 @@
                     </div>
                 </div>
                 <div>
-                    <h3 class="text-lg font-semibold mb-2">To achieve your objective:</h3>
-                    <table class="w-full">
-                        <tr>
-                            <td class="font-semibold">Hourly rate (current hours):</td>
-                            <td id="requiredHourlyRate"></td>
-                            <td id="requiredHourlyRateChange" class="text-sm text-gray-600"></td>
-                        </tr>
-                        <tr>
-                            <td class="font-semibold">Hourly rate (half hours):</td>
-                            <td id="requiredHourlyRateHalf"></td>
-                            <td id="requiredHourlyRateHalfChange" class="text-sm text-gray-600"></td>
-                        </tr>
-                    </table>
+                    <h3 class="text-lg font-semibold mb-2">To achieve your monthly income objective of <span id="goalMonthlyIncomeDisplay"></span>:</h3>
+                    <p class="text-xl font-bold text-blue-600">
+                        Hourly rate: <span id="requiredHourlyRate"></span> <span id="requiredHourlyRateChange" class="text-sm"></span>
+                    </p>
                 </div>
                 <div>
-                    <h3 class="text-lg font-semibold mb-2">Time to reach goal amount:</h3>
+                    <h3 class="text-lg font-semibold mb-2">Time to reach goal amount of <span id="goalTotalAmountDisplay"></span>:</h3>
                     <p id="yearsToReachGoal" class="text-xl font-bold text-blue-600"></p>
                 </div>
             </div>
@@ -185,23 +176,19 @@
             // Calculate required rates for objective
             const requiredAnnualIncome = goalMonthlyIncome * 12;
             const requiredHourlyRate = requiredAnnualIncome / actualWorkingHoursPerYear;
-            const requiredHourlyRateHalf = requiredHourlyRate * 2;
 
             // Calculate percentage changes
             const hourlyRateChange = ((requiredHourlyRate - totalHourlyRate) / totalHourlyRate) * 100;
-            const hourlyRateHalfChange = ((requiredHourlyRateHalf - totalHourlyRate) / totalHourlyRate) * 100;
+
+            // Update goal displays
+            document.getElementById('goalMonthlyIncomeDisplay').textContent = `${currency}${goalMonthlyIncome.toFixed(2)}`;
+            document.getElementById('goalTotalAmountDisplay').textContent = `${currency}${goalTotalAmount.toFixed(2)}`;
 
             // Update "To achieve your objective" section
             document.getElementById('requiredHourlyRate').textContent = `${currency}${requiredHourlyRate.toFixed(2)}`;
             document.getElementById('requiredHourlyRateChange').textContent = 
                 hourlyRateChange > 0 ? `(+${hourlyRateChange.toFixed(2)}%)` : 
                 hourlyRateChange < 0 ? `(${hourlyRateChange.toFixed(2)}%)` : 
-                "(0.00%)";
-
-            document.getElementById('requiredHourlyRateHalf').textContent = `${currency}${requiredHourlyRateHalf.toFixed(2)}`;
-            document.getElementById('requiredHourlyRateHalfChange').textContent = 
-                hourlyRateHalfChange > 0 ? `(+${hourlyRateHalfChange.toFixed(2)}%)` : 
-                hourlyRateHalfChange < 0 ? `(${hourlyRateHalfChange.toFixed(2)}%)` : 
                 "(0.00%)";
 
             // Calculate time to reach goal total amount
