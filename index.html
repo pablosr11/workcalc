@@ -5,12 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>wurk-life Calculator</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .overflow-x-auto {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        @media (max-width: 1024px) {
+            table {
+                font-size: 0.75rem;
+            }
+            th, td {
+                padding: 0.5rem 0.25rem;
+            }
+        }
+    </style>
 </head>
 <body class="bg-blue-50 min-h-screen flex items-center justify-center p-4">
     <div class="bg-white p-8 rounded-lg shadow-md max-w-4xl w-full flex">
         <div class="w-1/2 pr-4">
             <h1 class="text-2xl font-bold mb-6 text-center text-blue-600">wurk-life Calculator</h1>
-            <form id="incomeForm" class="space-y-4">
+            <div id="incomeForm" class="space-y-4">
                 <div>
                     <label for="workingDays" class="block text-sm font-medium text-gray-700">Working days per month</label>
                     <input type="number" id="workingDays" name="workingDays" value="21" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
@@ -47,60 +62,62 @@
                     <label for="goalMonthlyIncome" class="block text-sm font-medium text-gray-700">Goal monthly income</label>
                     <input type="number" id="goalMonthlyIncome" name="goalMonthlyIncome" value="10000" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                 </div>
-                <button type="submit" class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">Calculate</button>
-            </form>
+                <button type="button" id="calculateButton" class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">Calculate</button>
+            </div>
         </div>
         <div class="w-1/2 pl-4">
             <h2 class="text-xl font-bold mb-4 text-blue-600">Results</h2>
             <div id="resultsSection" class="hidden space-y-6">
                 <div>
                     <h3 class="text-lg font-semibold mb-2">Current Rates</h3>
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Period</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Base Rate</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">With Bonus</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">With Pension</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">With Holidays</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">With Bonus, Holidays & Pension</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Per Hour</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" id="ratePerHour"></td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" id="ratePerHourWithBonus"></td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" id="ratePerHourWithPension"></td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" id="ratePerHourWithHolidays"></td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" id="ratePerHourWithBonusHolidaysAndPension"></td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Per Day</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" id="ratePerDay"></td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" id="ratePerDayWithBonus"></td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" id="ratePerDayWithPension"></td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" id="ratePerDayWithHolidays"></td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" id="ratePerDayWithBonusHolidaysAndPension"></td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Per Month</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" id="ratePerMonth"></td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" id="ratePerMonthWithBonus"></td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" id="ratePerMonthWithPension"></td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" id="ratePerMonthWithHolidays"></td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" id="ratePerMonthWithBonusHolidaysAndPension"></td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Per Year</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" id="ratePerYear"></td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" id="ratePerYearWithBonus"></td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" id="ratePerYearWithPension"></td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" id="ratePerYearWithHolidays"></td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" id="ratePerYearWithBonusHolidaysAndPension"></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200 text-sm">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Period</th>
+                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Base</th>
+                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">+Bonus</th>
+                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">+Pension</th>
+                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">+Holidays</th>
+                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">All</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-3 py-2 whitespace-nowrap text-sm font-medium text-gray-900">Per Hour</td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerHour"></td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerHourWithBonus"></td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerHourWithPension"></td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerHourWithHolidays"></td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerHourWithBonusHolidaysAndPension"></td>
+                                </tr>
+                                <tr>
+                                    <td class="px-3 py-2 whitespace-nowrap text-sm font-medium text-gray-900">Per Day</td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerDay"></td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerDayWithBonus"></td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerDayWithPension"></td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerDayWithHolidays"></td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerDayWithBonusHolidaysAndPension"></td>
+                                </tr>
+                                <tr>
+                                    <td class="px-3 py-2 whitespace-nowrap text-sm font-medium text-gray-900">Per Month</td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerMonth"></td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerMonthWithBonus"></td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerMonthWithPension"></td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerMonthWithHolidays"></td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerMonthWithBonusHolidaysAndPension"></td>
+                                </tr>
+                                <tr>
+                                    <td class="px-3 py-2 whitespace-nowrap text-sm font-medium text-gray-900">Per Year</td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerYear"></td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerYearWithBonus"></td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerYearWithPension"></td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerYearWithHolidays"></td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500" id="ratePerYearWithBonusHolidaysAndPension"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <div>
                     <h3 class="text-lg font-semibold mb-2">To achieve your objective:</h3>
@@ -238,6 +255,9 @@
                 element.addEventListener(eventType, calculateAndUpdateResults);
             });
         });
+
+        // Replace the form submit event listener with a button click event
+        document.getElementById('calculateButton').addEventListener('click', calculateAndUpdateResults);
 
         // Initial calculation
         calculateAndUpdateResults();
