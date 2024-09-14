@@ -160,101 +160,99 @@
             const annualIncomeWithoutBonus = monthlyIncome * 12;
             const annualIncomeWithBonus = annualIncomeWithoutBonus + annualBonus;
 
-            // Base rates
-            const ratePerHour = annualIncomeWithoutBonus / workingHoursPerYear;
-            const ratePerDay = ratePerHour * hoursPerDay;
-            const ratePerMonth = monthlyIncome;
-            const ratePerYear = annualIncomeWithoutBonus;
-
-            // Rates with bonus
-            const ratePerHourWithBonus = annualIncomeWithBonus / workingHoursPerYear;
-            const ratePerDayWithBonus = ratePerHourWithBonus * hoursPerDay;
-            const ratePerMonthWithBonus = annualIncomeWithBonus / 12;
-            const ratePerYearWithBonus = annualIncomeWithBonus;
-
-            // Rates with pension
-            const ratePerHourWithPension = ratePerHour * pensionFactor;
-            const ratePerDayWithPension = ratePerDay * pensionFactor;
-            const ratePerMonthWithPension = ratePerMonth * pensionFactor;
-            const ratePerYearWithPension = ratePerYear * pensionFactor;
-
-            // Rates with holidays
+            // Calculate actual working time
             const actualWorkingDaysPerYear = workingDaysPerYear - holidaysPerYear;
             const actualWorkingHoursPerYear = actualWorkingDaysPerYear * hoursPerDay;
-            const ratePerHourWithHolidays = annualIncomeWithoutBonus / actualWorkingHoursPerYear;
-            const ratePerDayWithHolidays = ratePerHourWithHolidays * hoursPerDay;
-            const ratePerMonthWithHolidays = annualIncomeWithoutBonus / 12;
-            const ratePerYearWithHolidays = annualIncomeWithoutBonus;
 
-            // Rates with bonus, holidays and pension
-            const ratePerHourWithBonusHolidaysAndPension = (annualIncomeWithBonus / actualWorkingHoursPerYear) * pensionFactor;
-            const ratePerDayWithBonusHolidaysAndPension = ratePerHourWithBonusHolidaysAndPension * hoursPerDay;
-            const ratePerMonthWithBonusHolidaysAndPension = (annualIncomeWithBonus / 12) * pensionFactor;
-            const ratePerYearWithBonusHolidaysAndPension = annualIncomeWithBonus * pensionFactor;
+            // Calculate current rates
+            const currentHourlyRate = annualIncomeWithoutBonus / actualWorkingHoursPerYear;
+            const currentHourlyRateWithBonus = annualIncomeWithBonus / actualWorkingHoursPerYear;
+            const currentHourlyRateWithPension = currentHourlyRate * pensionFactor;
+            const currentHourlyRateAll = currentHourlyRateWithBonus * pensionFactor;
 
-            // Update DOM elements with calculated values
+            // Calculate required rates
+            const requiredAnnualIncome = goalMonthlyIncome * 12;
+            const requiredHourlyRate = requiredAnnualIncome / actualWorkingHoursPerYear;
+            const requiredHourlyRateHalf = requiredHourlyRate * 2;
+
+            // Calculate percentage changes
+            const hourlyRateChange = ((requiredHourlyRate - currentHourlyRateAll) / currentHourlyRateAll) * 100;
+            const hourlyRateHalfChange = ((requiredHourlyRateHalf - currentHourlyRateAll) / currentHourlyRateAll) * 100;
+
+            // Update DOM elements
             function updateElement(id, value) {
                 document.getElementById(id).textContent = `${currency}${value.toFixed(2)}`;
             }
 
-            updateElement('ratePerHour', ratePerHour);
-            updateElement('ratePerDay', ratePerDay);
-            updateElement('ratePerMonth', ratePerMonth);
-            updateElement('ratePerYear', ratePerYear);
+            // Update current rates table
+            updateElement('ratePerHourWithBonus', currentHourlyRateWithBonus);
+            updateElement('ratePerDayWithBonus', currentHourlyRateWithBonus * hoursPerDay);
+            updateElement('ratePerMonthWithBonus', (annualIncomeWithBonus / 12));
+            updateElement('ratePerYearWithBonus', annualIncomeWithBonus);
 
-            updateElement('ratePerHourWithBonus', ratePerHourWithBonus);
-            updateElement('ratePerDayWithBonus', ratePerDayWithBonus);
-            updateElement('ratePerMonthWithBonus', ratePerMonthWithBonus);
-            updateElement('ratePerYearWithBonus', ratePerYearWithBonus);
+            updateElement('ratePerHourWithPension', currentHourlyRateWithPension);
+            updateElement('ratePerDayWithPension', currentHourlyRateWithPension * hoursPerDay);
+            updateElement('ratePerMonthWithPension', (annualIncomeWithoutBonus * pensionFactor / 12));
+            updateElement('ratePerYearWithPension', annualIncomeWithoutBonus * pensionFactor);
 
-            updateElement('ratePerHourWithPension', ratePerHourWithPension);
-            updateElement('ratePerDayWithPension', ratePerDayWithPension);
-            updateElement('ratePerMonthWithPension', ratePerMonthWithPension);
-            updateElement('ratePerYearWithPension', ratePerYearWithPension);
+            updateElement('ratePerHourWithHolidays', currentHourlyRate);
+            updateElement('ratePerDayWithHolidays', currentHourlyRate * hoursPerDay);
+            updateElement('ratePerMonthWithHolidays', (annualIncomeWithoutBonus / 12));
+            updateElement('ratePerYearWithHolidays', annualIncomeWithoutBonus);
 
-            updateElement('ratePerHourWithHolidays', ratePerHourWithHolidays);
-            updateElement('ratePerDayWithHolidays', ratePerDayWithHolidays);
-            updateElement('ratePerMonthWithHolidays', ratePerMonthWithHolidays);
-            updateElement('ratePerYearWithHolidays', ratePerYearWithHolidays);
+            updateElement('ratePerHourWithBonusHolidaysAndPension', currentHourlyRateAll);
+            updateElement('ratePerDayWithBonusHolidaysAndPension', currentHourlyRateAll * hoursPerDay);
+            updateElement('ratePerMonthWithBonusHolidaysAndPension', (annualIncomeWithBonus * pensionFactor / 12));
+            updateElement('ratePerYearWithBonusHolidaysAndPension', annualIncomeWithBonus * pensionFactor);
 
-            updateElement('ratePerHourWithBonusHolidaysAndPension', ratePerHourWithBonusHolidaysAndPension);
-            updateElement('ratePerDayWithBonusHolidaysAndPension', ratePerDayWithBonusHolidaysAndPension);
-            updateElement('ratePerMonthWithBonusHolidaysAndPension', ratePerMonthWithBonusHolidaysAndPension);
-            updateElement('ratePerYearWithBonusHolidaysAndPension', ratePerYearWithBonusHolidaysAndPension);
-
-            const requiredHourlyRate = goalMonthlyIncome / workingHoursPerMonth;
-            const requiredHourlyRateHalf = goalMonthlyIncome / (workingHoursPerMonth / 2);
-            
-            const hourlyRateChange = ((requiredHourlyRate - ratePerHour) / ratePerHour) * 100;
-            const hourlyRateHalfChange = ((requiredHourlyRateHalf - ratePerHour) / ratePerHour) * 100;
-
+            // Update "To achieve your objective" section
             document.getElementById('requiredHourlyRate').textContent = `${currency}${requiredHourlyRate.toFixed(2)}`;
-            document.getElementById('requiredHourlyRateChange').textContent = `(${hourlyRateChange >= 0 ? '+' : ''}${hourlyRateChange.toFixed(2)}%)`;
+            document.getElementById('requiredHourlyRateChange').textContent = 
+                hourlyRateChange > 0 ? `(+${hourlyRateChange.toFixed(2)}%)` : 
+                hourlyRateChange < 0 ? `(${hourlyRateChange.toFixed(2)}%)` : 
+                "(0.00%)";
 
             document.getElementById('requiredHourlyRateHalf').textContent = `${currency}${requiredHourlyRateHalf.toFixed(2)}`;
-            document.getElementById('requiredHourlyRateHalfChange').textContent = `(${hourlyRateHalfChange >= 0 ? '+' : ''}${hourlyRateHalfChange.toFixed(2)}%)`;
+            document.getElementById('requiredHourlyRateHalfChange').textContent = 
+                hourlyRateHalfChange > 0 ? `(+${hourlyRateHalfChange.toFixed(2)}%)` : 
+                hourlyRateHalfChange < 0 ? `(${hourlyRateHalfChange.toFixed(2)}%)` : 
+                "(0.00%)";
 
             document.getElementById('resultsSection').classList.remove('hidden');
         }
 
-        // Add event listeners to input fields
-        const inputFields = [
-            'workingDays',
-            'hoursPerDay',
-            'holidaysPerYear',
-            'pensionPercentage',
-            'monthlyIncome',
-            'annualBonus',
-            'currency',
-            'goalMonthlyIncome'
-        ];
+        // Add this function to your JavaScript
+        function setupInputFields() {
+            const inputFields = [
+                'workingDays',
+                'hoursPerDay',
+                'monthlyIncome',
+                'holidaysPerYear',
+                'pensionPercentage',
+                'annualBonus',
+                'goalMonthlyIncome'
+            ];
 
-        inputFields.forEach(fieldId => {
-            const element = document.getElementById(fieldId);
-            ['input', 'change', 'keyup'].forEach(eventType => {
-                element.addEventListener(eventType, calculateAndUpdateResults);
+            inputFields.forEach(fieldId => {
+                const element = document.getElementById(fieldId);
+                element.addEventListener('focus', function() {
+                    if (this.value === '0') {
+                        this.value = '';
+                    }
+                });
+                element.addEventListener('blur', function() {
+                    if (this.value === '') {
+                        this.value = '0';
+                    }
+                });
+                ['input', 'change', 'keyup'].forEach(eventType => {
+                    element.addEventListener(eventType, calculateAndUpdateResults);
+                });
             });
-        });
+        }
+
+        // Call this function after the DOM is loaded
+        document.addEventListener('DOMContentLoaded', setupInputFields);
 
         // Replace the form submit event listener with a button click event
         document.getElementById('calculateButton').addEventListener('click', calculateAndUpdateResults);
